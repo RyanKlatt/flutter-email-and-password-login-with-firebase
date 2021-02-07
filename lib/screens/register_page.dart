@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_starter/screens/home_page.dart';
 
 class RegisterPage extends StatelessWidget {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,6 +27,7 @@ class RegisterPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   TextField(
+                    controller: _emailController,
                     decoration: InputDecoration(
                       labelText: 'Email',
                     ),
@@ -30,6 +36,7 @@ class RegisterPage extends StatelessWidget {
                     height: 8.0,
                   ),
                   TextField(
+                    controller: _passwordController,
                     decoration: InputDecoration(
                       labelText: 'Password',
                     ),
@@ -38,6 +45,7 @@ class RegisterPage extends StatelessWidget {
                     height: 8.0,
                   ),
                   TextField(
+                    controller: _confirmPasswordController,
                     decoration: InputDecoration(
                       labelText: 'Confirm Password',
                     ),

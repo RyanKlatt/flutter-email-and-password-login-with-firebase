@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_starter/screens/sign_in_page.dart';
+import 'package:flutter_starter/services/auth_service.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -15,7 +16,9 @@ class HomePage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
-              onTap: () => _logOut(context),
+              onTap: () {
+                context.read<AuthService>().signOut(context);
+              },
               child: Icon(Icons.logout),
             ),
           ),
@@ -33,11 +36,5 @@ class HomePage extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  void _logOut(context) {
-    Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => SignInPage()),
-        (Route<dynamic> route) => false);
   }
 }

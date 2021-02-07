@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_starter/screens/home_page.dart';
 import 'package:flutter_starter/screens/register_page.dart';
+import 'package:flutter_starter/services/auth_service.dart';
+import 'package:provider/provider.dart';
 
 class SignInPage extends StatelessWidget {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+    final node = FocusScope.of(context);
     return Scaffold(
       backgroundColor: Colors.grey[800],
       appBar: AppBar(
@@ -23,6 +28,10 @@ class SignInPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   TextField(
+                    controller: _emailController,
+                    keyboardType: TextInputType.emailAddress,
+                    textInputAction: TextInputAction.next,
+                    onEditingComplete: () => node.nextFocus(),
                     decoration: InputDecoration(
                       labelText: 'Email',
                     ),
@@ -31,6 +40,10 @@ class SignInPage extends StatelessWidget {
                     height: 8.0,
                   ),
                   TextField(
+                    controller: _passwordController,
+                    textInputAction: TextInputAction.done,
+                    onSubmitted: (_) => node.unfocus(),
+                    obscureText: true,
                     decoration: InputDecoration(
                       labelText: 'Password',
                     ),
@@ -39,7 +52,11 @@ class SignInPage extends StatelessWidget {
                     height: 8.0,
                   ),
                   RaisedButton(
-                    onPressed: () => _signIn(context),
+                    onPressed: () {
+                      context.read<AuthService>().signIn(
+                          email: _emailController.text.trim(),
+                          password: _passwordController.text.trim());
+                    },
                     elevation: 8.0,
                     color: Colors.blueGrey[500],
                     child: Text(
@@ -78,15 +95,6 @@ class SignInPage extends StatelessWidget {
       context,
       MaterialPageRoute(
         builder: (context) => RegisterPage(),
-      ),
-    );
-  }
-
-  void _signIn(context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => HomePage(),
       ),
     );
   }
