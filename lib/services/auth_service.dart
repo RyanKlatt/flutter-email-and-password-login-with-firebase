@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_starter/screens/sign_in_page.dart';
 
 class AuthService {
   final FirebaseAuth _firebaseAuth;
@@ -15,24 +14,25 @@ class AuthService {
         .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
   }
 
-  Future<String> signIn({String email, String password}) async {
+  Future<bool> signIn({String email, String password}) async {
     try {
       await _firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
-      return "Signed in";
+      return true;
     } on FirebaseAuthException catch (e) {
-      print(e.message);
-      return e.message;
+      print(e.code);
+      return false;
     }
   }
 
-  Future<String> signUp({String email, String password}) async {
+  Future<bool> signUp({String email, String password}) async {
     try {
       await _firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
-      return "Signed up";
+      return true;
     } on FirebaseAuthException catch (e) {
-      return e.message;
+      print(e.code);
+      return false;
     }
   }
 }

@@ -42,7 +42,11 @@ class SignInPage extends StatelessWidget {
                   TextField(
                     controller: _passwordController,
                     textInputAction: TextInputAction.done,
-                    onSubmitted: (_) => node.unfocus(),
+                    onSubmitted: (_) {
+                      context.read<AuthService>().signIn(
+                          email: _emailController.text.trim(),
+                          password: _passwordController.text.trim());
+                    },
                     obscureText: true,
                     decoration: InputDecoration(
                       labelText: 'Password',
@@ -52,10 +56,28 @@ class SignInPage extends StatelessWidget {
                     height: 8.0,
                   ),
                   RaisedButton(
-                    onPressed: () {
-                      context.read<AuthService>().signIn(
+                    onPressed: () async {
+                      bool isError = await context.read<AuthService>().signIn(
                           email: _emailController.text.trim(),
                           password: _passwordController.text.trim());
+                      if (!isError) {
+                        showDialog(
+                            context: context,
+                            builder: (_) => AlertDialog(
+                                  title: Text('Login Failed'),
+                                  content: Text('Email or Password not valid!'),
+                                  actions: [
+                                    FlatButton(
+                                      child: Text(
+                                        'Try Again',
+                                        style: TextStyle(fontSize: 15.0),
+                                      ),
+                                      onPressed: () => Navigator.pop(context),
+                                    ),
+                                  ],
+                                ),
+                            barrierDismissible: true);
+                      }
                     },
                     elevation: 8.0,
                     color: Colors.blueGrey[500],
