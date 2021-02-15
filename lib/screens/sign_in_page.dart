@@ -8,6 +8,8 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SignInPage extends StatelessWidget {
+  final AuthController _authController = Get.find();
+  final FormController _formController = Get.find();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -77,12 +79,24 @@ class SignInPage extends StatelessWidget {
       controller: _emailController,
       keyboardType: TextInputType.emailAddress,
       textInputAction: TextInputAction.next,
+      onChanged: (_) {
+        _formController.showEmailIcon(_emailController);
+      },
       onEditingComplete: () {
-        Get.find<FormController>().nextFocus(node);
+        _formController.nextFocus(node);
       },
       decoration: InputDecoration(
         labelText: 'Email',
         prefixIcon: Icon(Icons.email),
+        suffixIcon: GetBuilder<FormController>(
+          builder: (_) => Visibility(
+            visible: _formController.clearEmailIcon,
+            child: GestureDetector(
+              onTap: () => _formController.clearEmailField(_emailController),
+              child: Icon(FontAwesomeIcons.timesCircle),
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -90,7 +104,7 @@ class SignInPage extends StatelessWidget {
   TextField passwordTextField() {
     return TextField(
       onSubmitted: (_) {
-        Get.find<AuthController>().login(
+        _authController.login(
             _emailController.text.trim(), _passwordController.text.trim());
       },
       controller: _passwordController,
@@ -134,7 +148,7 @@ class SignInPage extends StatelessWidget {
   RaisedButton signInButton() {
     return RaisedButton(
       onPressed: () {
-        Get.find<AuthController>().login(
+        _authController.login(
             _emailController.text.trim(), _passwordController.text.trim());
       },
       padding: EdgeInsets.all(12.0),
@@ -156,8 +170,8 @@ class SignInPage extends StatelessWidget {
   FlatButton registerButton(node) {
     return FlatButton(
       onPressed: () {
-        Get.find<FormController>()
-            .clearFields(_emailController, _passwordController, node);
+        _formController.clearFields(
+            _emailController, _passwordController, node);
         Get.to(() => RegisterPage());
       },
       child: Text(
@@ -170,7 +184,7 @@ class SignInPage extends StatelessWidget {
   FlatButton forgotPasswordButton() {
     return FlatButton(
       onPressed: () {
-        Get.find<FormController>().testFunction();
+        _formController.testFunction();
       },
       child: Text(
         'Forgot password?',
