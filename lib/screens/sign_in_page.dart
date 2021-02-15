@@ -45,101 +45,20 @@ class SignInPage extends GetWidget<AuthController> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        TextField(
-                          controller: _emailController,
-                          keyboardType: TextInputType.emailAddress,
-                          textInputAction: TextInputAction.next,
-                          onEditingComplete: () => node.nextFocus(),
-                          decoration: InputDecoration(
-                            labelText: 'Email',
-                            prefixIcon: Icon(Icons.email),
-                          ),
-                        ),
+                        emailTextField(node),
                         SizedBox(
                           height: 8.0,
                         ),
-                        TextField(
-                          onSubmitted: (_) {
-                            controller.login(_emailController.text.trim(),
-                                _passwordController.text.trim());
-                          },
-                          controller: _passwordController,
-                          textInputAction: TextInputAction.done,
-                          obscureText: true,
-                          decoration: InputDecoration(
-                            labelText: 'Password',
-                            prefixIcon: Icon(Icons.lock),
-                            suffixIcon: Stack(
-                              children: [
-                                Visibility(
-                                  visible: false,
-                                  child: IconButton(
-                                    icon: FaIcon(
-                                      FontAwesomeIcons.solidEyeSlash,
-                                      size: 18.0,
-                                    ),
-                                    onPressed: () {
-                                      print('hello');
-                                    },
-                                  ),
-                                ),
-                                Visibility(
-                                  visible: false,
-                                  child: IconButton(
-                                    icon: FaIcon(
-                                      FontAwesomeIcons.solidEye,
-                                      size: 18.0,
-                                    ),
-                                    onPressed: () {
-                                      print('hello');
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                        passwordTextField(),
                         SizedBox(
                           height: 12.0,
                         ),
-                        RaisedButton(
-                          onPressed: () {
-                            controller.login(_emailController.text.trim(),
-                                _passwordController.text.trim());
-                          },
-                          padding: EdgeInsets.all(12.0),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(30.0),
-                          ),
-                          elevation: 8.0,
-                          color: Colors.blueGrey[500],
-                          child: Text(
-                            'Sign In',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18.0,
-                            ),
-                          ),
-                        ),
+                        signInButton(),
                         SizedBox(
                           height: 12.0,
                         ),
-                        FlatButton(
-                          onPressed: () {
-                            Get.to(() => RegisterPage());
-                          },
-                          child: Text(
-                            'Need an account? Register',
-                            style: TextStyle(color: Colors.grey[700]),
-                          ),
-                        ),
-                        FlatButton(
-                          onPressed: () {},
-                          child: Text(
-                            'Forgot password?',
-                            style: TextStyle(color: Colors.grey[700]),
-                          ),
-                        ),
+                        registerButton(),
+                        forgotPasswordButton(),
                       ],
                     ),
                   ),
@@ -148,6 +67,107 @@ class SignInPage extends GetWidget<AuthController> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  TextField emailTextField(FocusScopeNode node) {
+    return TextField(
+      controller: _emailController,
+      keyboardType: TextInputType.emailAddress,
+      textInputAction: TextInputAction.next,
+      onEditingComplete: () => node.nextFocus(),
+      decoration: InputDecoration(
+        labelText: 'Email',
+        prefixIcon: Icon(Icons.email),
+      ),
+    );
+  }
+
+  TextField passwordTextField() {
+    return TextField(
+      onSubmitted: (_) {
+        controller.login(
+            _emailController.text.trim(), _passwordController.text.trim());
+      },
+      controller: _passwordController,
+      textInputAction: TextInputAction.done,
+      obscureText: true,
+      decoration: InputDecoration(
+        labelText: 'Password',
+        prefixIcon: Icon(Icons.lock),
+        suffixIcon: Stack(
+          children: [
+            Visibility(
+              visible: false,
+              child: IconButton(
+                icon: FaIcon(
+                  FontAwesomeIcons.solidEyeSlash,
+                  size: 18.0,
+                ),
+                onPressed: () {
+                  print('hello');
+                },
+              ),
+            ),
+            Visibility(
+              visible: false,
+              child: IconButton(
+                icon: FaIcon(
+                  FontAwesomeIcons.solidEye,
+                  size: 18.0,
+                ),
+                onPressed: () {
+                  print('hello');
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  RaisedButton signInButton() {
+    return RaisedButton(
+      onPressed: () {
+        controller.login(
+            _emailController.text.trim(), _passwordController.text.trim());
+      },
+      padding: EdgeInsets.all(12.0),
+      shape: RoundedRectangleBorder(
+        borderRadius: new BorderRadius.circular(30.0),
+      ),
+      elevation: 8.0,
+      color: Colors.blueGrey[500],
+      child: Text(
+        'Sign In',
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 18.0,
+        ),
+      ),
+    );
+  }
+
+  FlatButton registerButton() {
+    return FlatButton(
+      onPressed: () {
+        Get.to(() => RegisterPage());
+      },
+      child: Text(
+        'Need an account? Register',
+        style: TextStyle(color: Colors.grey[700]),
+      ),
+    );
+  }
+
+  FlatButton forgotPasswordButton() {
+    return FlatButton(
+      onPressed: () {},
+      child: Text(
+        'Forgot password?',
+        style: TextStyle(color: Colors.grey[700]),
       ),
     );
   }
