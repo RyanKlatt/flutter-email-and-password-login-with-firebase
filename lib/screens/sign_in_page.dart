@@ -1,84 +1,18 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_starter/controllers/auth_controller.dart';
 import 'package:flutter_starter/screens/register_page.dart';
-import 'package:flutter_starter/services/auth_service.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 
-class SignInPage extends StatefulWidget {
-  @override
-  _SignInPageState createState() => _SignInPageState();
-}
-
-class _SignInPageState extends State<SignInPage> {
+class SignInPage extends GetWidget<AuthController> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     final node = FocusScope.of(context);
-
-    void _clearFields() {
-      _emailController.clear();
-      _passwordController.clear();
-    }
-
-    void _goToRegisterAccountPage() {
-      _clearFields();
-      node.unfocus();
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => RegisterPage(),
-        ),
-      );
-    }
-
-    _signIn() async {
-      bool signedIn = await context.read<AuthService>().signIn(
-          email: _emailController.text.trim(),
-          password: _passwordController.text.trim());
-      if (!signedIn) {
-        showDialog(
-            context: context,
-            builder: (_) => AlertDialog(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(30.0),
-                  ),
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Login Failed',
-                        style: TextStyle(
-                          fontSize: 25.0,
-                        ),
-                      ),
-                      SizedBox(
-                        width: 10.0,
-                      ),
-                      Icon(
-                        Icons.error_outline,
-                        color: Colors.red[400],
-                        size: 40.0,
-                      ),
-                    ],
-                  ),
-                  content: Text('Email or Password not valid.'),
-                  actions: [
-                    FlatButton(
-                      child: Text(
-                        'Try Again',
-                        style: TextStyle(fontSize: 15.0),
-                      ),
-                      onPressed: () => Navigator.pop(context),
-                    ),
-                  ],
-                ),
-            barrierDismissible: true);
-      }
-    }
 
     return Scaffold(
       backgroundColor: Colors.grey[800],
@@ -125,19 +59,43 @@ class _SignInPageState extends State<SignInPage> {
                           height: 8.0,
                         ),
                         TextField(
+                          onSubmitted: (_) {
+                            controller.login(_emailController.text.trim(),
+                                _passwordController.text.trim());
+                          },
                           controller: _passwordController,
                           textInputAction: TextInputAction.done,
-                          onSubmitted: (_) async => _signIn(),
                           obscureText: true,
                           decoration: InputDecoration(
                             labelText: 'Password',
                             prefixIcon: Icon(Icons.lock),
-                            suffixIcon: IconButton(
-                              icon: FaIcon(
-                                FontAwesomeIcons.solidEyeSlash,
-                                size: 18.0,
-                              ),
-                              onPressed: () {},
+                            suffixIcon: Stack(
+                              children: [
+                                Visibility(
+                                  visible: false,
+                                  child: IconButton(
+                                    icon: FaIcon(
+                                      FontAwesomeIcons.solidEyeSlash,
+                                      size: 18.0,
+                                    ),
+                                    onPressed: () {
+                                      print('hello');
+                                    },
+                                  ),
+                                ),
+                                Visibility(
+                                  visible: false,
+                                  child: IconButton(
+                                    icon: FaIcon(
+                                      FontAwesomeIcons.solidEye,
+                                      size: 18.0,
+                                    ),
+                                    onPressed: () {
+                                      print('hello');
+                                    },
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
@@ -145,7 +103,10 @@ class _SignInPageState extends State<SignInPage> {
                           height: 12.0,
                         ),
                         RaisedButton(
-                          onPressed: _signIn,
+                          onPressed: () {
+                            controller.login(_emailController.text.trim(),
+                                _passwordController.text.trim());
+                          },
                           padding: EdgeInsets.all(12.0),
                           shape: RoundedRectangleBorder(
                             borderRadius: new BorderRadius.circular(30.0),
@@ -164,7 +125,9 @@ class _SignInPageState extends State<SignInPage> {
                           height: 12.0,
                         ),
                         FlatButton(
-                          onPressed: _goToRegisterAccountPage,
+                          onPressed: () {
+                            Get.to(() => RegisterPage());
+                          },
                           child: Text(
                             'Need an account? Register',
                             style: TextStyle(color: Colors.grey[700]),

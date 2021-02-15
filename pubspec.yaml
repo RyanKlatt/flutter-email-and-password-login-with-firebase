@@ -28,8 +28,8 @@ dependencies:
   firebase_auth: ^0.20.0+1
   firebase_core: ^0.7.0
   font_awesome_flutter: ^8.11.0
+  get: ^3.25.4
   google_fonts: ^1.1.2
-  provider: ^4.3.3
 
 dev_dependencies:
   flutter_test:

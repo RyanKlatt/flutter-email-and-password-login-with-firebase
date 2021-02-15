@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_starter/services/auth_service.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_starter/controllers/auth_controller.dart';
+import 'package:get/get.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends GetWidget<AuthController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,7 +17,7 @@ class HomePage extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
               onTap: () {
-                context.read<AuthService>().signOut(context);
+                controller.signOut();
               },
               child: Icon(Icons.logout),
             ),
