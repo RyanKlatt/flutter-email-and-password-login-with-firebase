@@ -1,12 +1,13 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_starter/controllers/auth_controller.dart';
+import 'package:flutter_starter/controllers/form_controller.dart';
 import 'package:flutter_starter/screens/register_page.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class SignInPage extends GetWidget<AuthController> {
+class SignInPage extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -57,7 +58,7 @@ class SignInPage extends GetWidget<AuthController> {
                         SizedBox(
                           height: 12.0,
                         ),
-                        registerButton(),
+                        registerButton(node),
                         forgotPasswordButton(),
                       ],
                     ),
@@ -71,12 +72,14 @@ class SignInPage extends GetWidget<AuthController> {
     );
   }
 
-  TextField emailTextField(FocusScopeNode node) {
+  TextField emailTextField(node) {
     return TextField(
       controller: _emailController,
       keyboardType: TextInputType.emailAddress,
       textInputAction: TextInputAction.next,
-      onEditingComplete: () => node.nextFocus(),
+      onEditingComplete: () {
+        Get.find<FormController>().nextFocus(node);
+      },
       decoration: InputDecoration(
         labelText: 'Email',
         prefixIcon: Icon(Icons.email),
@@ -87,7 +90,7 @@ class SignInPage extends GetWidget<AuthController> {
   TextField passwordTextField() {
     return TextField(
       onSubmitted: (_) {
-        controller.login(
+        Get.find<AuthController>().login(
             _emailController.text.trim(), _passwordController.text.trim());
       },
       controller: _passwordController,
@@ -131,7 +134,7 @@ class SignInPage extends GetWidget<AuthController> {
   RaisedButton signInButton() {
     return RaisedButton(
       onPressed: () {
-        controller.login(
+        Get.find<AuthController>().login(
             _emailController.text.trim(), _passwordController.text.trim());
       },
       padding: EdgeInsets.all(12.0),
@@ -150,9 +153,11 @@ class SignInPage extends GetWidget<AuthController> {
     );
   }
 
-  FlatButton registerButton() {
+  FlatButton registerButton(node) {
     return FlatButton(
       onPressed: () {
+        Get.find<FormController>()
+            .clearFields(_emailController, _passwordController, node);
         Get.to(() => RegisterPage());
       },
       child: Text(
@@ -164,7 +169,9 @@ class SignInPage extends GetWidget<AuthController> {
 
   FlatButton forgotPasswordButton() {
     return FlatButton(
-      onPressed: () {},
+      onPressed: () {
+        Get.find<FormController>().testFunction();
+      },
       child: Text(
         'Forgot password?',
         style: TextStyle(color: Colors.grey[700]),
