@@ -9,8 +9,8 @@ class AuthController extends GetxController {
   String get user => _firebaseUser.value?.email;
 
   @override
-  // ignore: must_call_super
   void onInit() {
+    super.onInit();
     _firebaseUser.bindStream(_auth.authStateChanges());
   }
 

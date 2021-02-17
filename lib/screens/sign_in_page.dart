@@ -80,7 +80,7 @@ class SignInPage extends StatelessWidget {
       keyboardType: TextInputType.emailAddress,
       textInputAction: TextInputAction.next,
       onChanged: (_) {
-        _formController.showEmailIcon(_emailController);
+        _formController.showClearEmailIcon(_emailController);
       },
       onEditingComplete: () {
         _formController.nextFocus(node);
@@ -93,7 +93,10 @@ class SignInPage extends StatelessWidget {
             visible: _formController.clearEmailIcon,
             child: GestureDetector(
               onTap: () => _formController.clearEmailField(_emailController),
-              child: Icon(FontAwesomeIcons.timesCircle),
+              child: Icon(
+                FontAwesomeIcons.timesCircle,
+                size: 20.0,
+              ),
             ),
           ),
         ),
@@ -101,45 +104,47 @@ class SignInPage extends StatelessWidget {
     );
   }
 
-  TextField passwordTextField() {
-    return TextField(
-      onSubmitted: (_) {
-        _authController.login(
-            _emailController.text.trim(), _passwordController.text.trim());
-      },
-      controller: _passwordController,
-      textInputAction: TextInputAction.done,
-      obscureText: true,
-      decoration: InputDecoration(
-        labelText: 'Password',
-        prefixIcon: Icon(Icons.lock),
-        suffixIcon: Stack(
-          children: [
-            Visibility(
-              visible: false,
-              child: IconButton(
-                icon: FaIcon(
-                  FontAwesomeIcons.solidEyeSlash,
-                  size: 18.0,
+  passwordTextField() {
+    return GetBuilder<FormController>(
+      builder: (_) => TextField(
+        controller: _passwordController,
+        onSubmitted: (_) {
+          _authController.login(
+              _emailController.text.trim(), _passwordController.text.trim());
+        },
+        onChanged: (_) {
+          _formController.isPasswordIconHidden(_passwordController);
+        },
+        textInputAction: TextInputAction.done,
+        obscureText: _formController.hidePasswordText,
+        decoration: InputDecoration(
+          labelText: 'Password',
+          prefixIcon: Icon(Icons.lock),
+          suffixIcon: Stack(
+            alignment: Alignment.center,
+            children: [
+              Visibility(
+                visible: _formController.hidePasswordIcon,
+                child: GestureDetector(
+                  onTap: () => _formController.showPassword(),
+                  child: Icon(
+                    FontAwesomeIcons.eyeSlash,
+                    size: 20.0,
+                  ),
                 ),
-                onPressed: () {
-                  print('hello');
-                },
               ),
-            ),
-            Visibility(
-              visible: false,
-              child: IconButton(
-                icon: FaIcon(
-                  FontAwesomeIcons.solidEye,
-                  size: 18.0,
+              Visibility(
+                visible: _formController.showPasswordIcon,
+                child: GestureDetector(
+                  onTap: () => _formController.hidePassword(),
+                  child: Icon(
+                    FontAwesomeIcons.eye,
+                    size: 20.0,
+                  ),
                 ),
-                onPressed: () {
-                  print('hello');
-                },
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
