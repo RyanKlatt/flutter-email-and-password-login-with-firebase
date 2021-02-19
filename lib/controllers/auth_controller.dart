@@ -23,6 +23,7 @@ class AuthController extends GetxController {
     try {
       await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
+      Get.delete<FormController>();
       Get.offAll(() => HomePage());
     } catch (e) {
       print(e.code);
@@ -77,6 +78,7 @@ class AuthController extends GetxController {
   Future<void> signOut() async {
     try {
       await _auth.signOut();
+      Get.delete<FormController>();
       Get.offAll(() => SignInPage());
     } catch (e) {
       Get.snackbar('Error Logging Out', e.message,

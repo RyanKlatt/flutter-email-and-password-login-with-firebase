@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class FormController extends FullLifeCycleController {
@@ -5,6 +6,11 @@ class FormController extends FullLifeCycleController {
   bool showPasswordIcon;
   bool hidePasswordIcon;
   bool hidePasswordText;
+
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  final FocusNode node = FocusNode();
 
   @override
   void onInit() {
@@ -17,16 +23,6 @@ class FormController extends FullLifeCycleController {
   }
 
   @override
-  void onReady() {
-    super.onReady();
-    clearEmailIcon = false;
-    showPasswordIcon = false;
-    hidePasswordIcon = false;
-    hidePasswordText = true;
-    print('onReady');
-  }
-
-  @override
   void onClose() {
     super.onClose();
     clearEmailIcon = false;
@@ -36,14 +32,14 @@ class FormController extends FullLifeCycleController {
     print('onClose');
   }
 
-  void clearEmailField(_emailController) {
-    _emailController.clear();
+  void clearEmailField() {
+    emailController.clear();
     clearEmailIcon = false;
     update();
   }
 
-  void showClearEmailIcon(_emailController) {
-    if (!_emailController.text.isEmpty) {
+  void showClearEmailIcon() {
+    if (emailController.text.isNotEmpty) {
       clearEmailIcon = true;
       update();
     } else {
@@ -52,16 +48,17 @@ class FormController extends FullLifeCycleController {
     }
   }
 
-  void isPasswordIconHidden(_passwordController) {
-    if (!_passwordController.text.isEmpty && showPasswordIcon == false) {
+  void isPasswordIconHidden() {
+    if (passwordController.text.isNotEmpty && showPasswordIcon == false) {
       hidePasswordIcon = true;
       hidePasswordText = true;
       update();
-    } else if (!_passwordController.text.isEmpty && hidePasswordIcon == false) {
+    } else if (passwordController.text.isNotEmpty &&
+        hidePasswordIcon == false) {
       showPasswordIcon = true;
       hidePasswordText = false;
       update();
-    } else if (_passwordController.text.isEmpty) {
+    } else if (passwordController.text.isEmpty) {
       hidePasswordIcon = false;
       showPasswordIcon = false;
       hidePasswordText = true;
@@ -83,9 +80,9 @@ class FormController extends FullLifeCycleController {
     }
   }
 
-  void clearFields(_emailController, _passwordController, node) {
-    _emailController.clear();
-    _passwordController.clear();
+  void clearFields() {
+    emailController.clear();
+    passwordController.clear();
     clearEmailIcon = false;
     hidePasswordIcon = false;
     showPasswordIcon = false;

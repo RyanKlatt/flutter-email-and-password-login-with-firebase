@@ -9,13 +9,9 @@ import 'package:google_fonts/google_fonts.dart';
 class RegisterPage extends StatelessWidget {
   final AuthController _authController = Get.find();
   final FormController _formController = Get.find();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    final node = FocusScope.of(context);
-
     return Scaffold(
       backgroundColor: Colors.grey[800],
       body: Center(
@@ -47,19 +43,19 @@ class RegisterPage extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        emailTextField(node),
+                        emailTextField(),
                         SizedBox(
                           height: 8.0,
                         ),
-                        passwordTextField(node),
+                        passwordTextField(),
                         SizedBox(
                           height: 12.0,
                         ),
-                        signUpButton(node),
+                        signUpButton(),
                         SizedBox(
                           height: 12.0,
                         ),
-                        haveAccountButton(node),
+                        haveAccountButton(),
                       ],
                     ),
                   ),
@@ -72,17 +68,18 @@ class RegisterPage extends StatelessWidget {
     );
   }
 
-  emailTextField(node) {
+  emailTextField() {
     return GetBuilder<FormController>(
       builder: (_) => TextField(
-        controller: _emailController,
+        focusNode: _formController.node,
+        controller: _formController.emailController,
         keyboardType: TextInputType.emailAddress,
         textInputAction: TextInputAction.next,
         onChanged: (_) {
-          _formController.showClearEmailIcon(_emailController);
+          _formController.showClearEmailIcon();
         },
         onEditingComplete: () {
-          node.nextFocus();
+          _formController.node.nextFocus();
         },
         decoration: InputDecoration(
           labelText: 'Email',
@@ -90,7 +87,7 @@ class RegisterPage extends StatelessWidget {
           suffixIcon: Visibility(
             visible: _formController.clearEmailIcon,
             child: GestureDetector(
-              onTap: () => _formController.clearEmailField(_emailController),
+              onTap: () => _formController.clearEmailField(),
               child: Icon(
                 FontAwesomeIcons.timesCircle,
                 size: 20.0,
@@ -102,16 +99,18 @@ class RegisterPage extends StatelessWidget {
     );
   }
 
-  passwordTextField(node) {
+  passwordTextField() {
     return GetBuilder<FormController>(
       builder: (_) => TextField(
-        controller: _passwordController,
+        controller: _formController.passwordController,
         onSubmitted: (_) {
           _authController.createUser(
-              _emailController.text.trim(), _passwordController.text.trim());
+            _formController.emailController.text.trim(),
+            _formController.passwordController.text.trim(),
+          );
         },
         onChanged: (_) {
-          _formController.isPasswordIconHidden(_passwordController);
+          _formController.isPasswordIconHidden();
         },
         textInputAction: TextInputAction.done,
         obscureText: _formController.hidePasswordText,
@@ -148,12 +147,12 @@ class RegisterPage extends StatelessWidget {
     );
   }
 
-  RaisedButton signUpButton(node) {
+  RaisedButton signUpButton() {
     return RaisedButton(
       onPressed: () {
         _authController.createUser(
-          _emailController.text.trim(),
-          _passwordController.text.trim(),
+          _formController.emailController.text.trim(),
+          _formController.passwordController.text.trim(),
         );
       },
       padding: EdgeInsets.all(12.0),
@@ -172,14 +171,10 @@ class RegisterPage extends StatelessWidget {
     );
   }
 
-  FlatButton haveAccountButton(node) {
+  FlatButton haveAccountButton() {
     return FlatButton(
       onPressed: () {
-        _formController.clearFields(
-          _emailController,
-          _passwordController,
-          node,
-        );
+        _formController.clearFields();
         Get.back();
       },
       child: Text(
