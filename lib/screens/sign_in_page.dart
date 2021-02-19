@@ -2,14 +2,16 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_starter/controllers/auth_controller.dart';
 import 'package:flutter_starter/controllers/form_controller.dart';
+import 'package:flutter_starter/screens/forgot_password.dart';
 import 'package:flutter_starter/screens/register_page.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SignInPage extends StatelessWidget {
+  final FormController _formController = Get.put(FormController());
   final AuthController _authController = Get.find();
-  final FormController _formController = Get.find();
+  //final FormController _formController = Get.find();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -56,7 +58,7 @@ class SignInPage extends StatelessWidget {
                         SizedBox(
                           height: 12.0,
                         ),
-                        signInButton(),
+                        signInButton(node),
                         SizedBox(
                           height: 12.0,
                         ),
@@ -74,22 +76,22 @@ class SignInPage extends StatelessWidget {
     );
   }
 
-  TextField emailTextField(node) {
-    return TextField(
-      controller: _emailController,
-      keyboardType: TextInputType.emailAddress,
-      textInputAction: TextInputAction.next,
-      onChanged: (_) {
-        _formController.showClearEmailIcon(_emailController);
-      },
-      onEditingComplete: () {
-        _formController.nextFocus(node);
-      },
-      decoration: InputDecoration(
-        labelText: 'Email',
-        prefixIcon: Icon(Icons.email),
-        suffixIcon: GetBuilder<FormController>(
-          builder: (_) => Visibility(
+  emailTextField(node) {
+    return GetBuilder<FormController>(
+      builder: (_) => TextField(
+        controller: _emailController,
+        keyboardType: TextInputType.emailAddress,
+        textInputAction: TextInputAction.next,
+        onChanged: (_) {
+          _formController.showClearEmailIcon(_emailController);
+        },
+        onEditingComplete: () {
+          node.nextFocus();
+        },
+        decoration: InputDecoration(
+          labelText: 'Email',
+          prefixIcon: Icon(Icons.email),
+          suffixIcon: Visibility(
             visible: _formController.clearEmailIcon,
             child: GestureDetector(
               onTap: () => _formController.clearEmailField(_emailController),
@@ -110,7 +112,9 @@ class SignInPage extends StatelessWidget {
         controller: _passwordController,
         onSubmitted: (_) {
           _authController.login(
-              _emailController.text.trim(), _passwordController.text.trim());
+            _emailController.text.trim(),
+            _passwordController.text.trim(),
+          );
         },
         onChanged: (_) {
           _formController.isPasswordIconHidden(_passwordController);
@@ -126,7 +130,7 @@ class SignInPage extends StatelessWidget {
               Visibility(
                 visible: _formController.hidePasswordIcon,
                 child: GestureDetector(
-                  onTap: () => _formController.showPassword(),
+                  onTap: () => _formController.showPasswordToggle(),
                   child: Icon(
                     FontAwesomeIcons.eyeSlash,
                     size: 20.0,
@@ -136,7 +140,7 @@ class SignInPage extends StatelessWidget {
               Visibility(
                 visible: _formController.showPasswordIcon,
                 child: GestureDetector(
-                  onTap: () => _formController.hidePassword(),
+                  onTap: () => _formController.showPasswordToggle(),
                   child: Icon(
                     FontAwesomeIcons.eye,
                     size: 20.0,
@@ -150,11 +154,13 @@ class SignInPage extends StatelessWidget {
     );
   }
 
-  RaisedButton signInButton() {
+  RaisedButton signInButton(node) {
     return RaisedButton(
-      onPressed: () {
-        _authController.login(
-            _emailController.text.trim(), _passwordController.text.trim());
+      onPressed: () async {
+        await _authController.login(
+          _emailController.text.trim(),
+          _passwordController.text.trim(),
+        );
       },
       padding: EdgeInsets.all(12.0),
       shape: RoundedRectangleBorder(
@@ -176,7 +182,10 @@ class SignInPage extends StatelessWidget {
     return FlatButton(
       onPressed: () {
         _formController.clearFields(
-            _emailController, _passwordController, node);
+          _emailController,
+          _passwordController,
+          node,
+        );
         Get.to(() => RegisterPage());
       },
       child: Text(
@@ -189,7 +198,7 @@ class SignInPage extends StatelessWidget {
   FlatButton forgotPasswordButton() {
     return FlatButton(
       onPressed: () {
-        _formController.testFunction();
+        Get.to(ForgotPasswordPage());
       },
       child: Text(
         'Forgot password?',

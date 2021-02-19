@@ -1,15 +1,19 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_starter/screens/home_page.dart';
+import 'package:flutter_starter/screens/sign_in_page.dart';
 import 'package:get/get.dart';
 
 class AuthController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   Rx<User> _firebaseUser = Rx<User>();
 
-  String get user => _firebaseUser.value?.email;
+  User get user => _firebaseUser.value;
+
+  Stream<User> get authStateChanges => _auth.idTokenChanges();
 
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
     _firebaseUser.bindStream(_auth.authStateChanges());
   }
@@ -18,24 +22,41 @@ class AuthController extends GetxController {
     try {
       await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
+      Get.offAll(() => HomePage());
     } catch (e) {
-      Get.snackbar(
-        'Error Creating User',
-        'Email must be valid and password at least 6 charaters.',
-        snackPosition: SnackPosition.BOTTOM,
-        colorText: Colors.white,
-        icon: Icon(
-          Icons.error,
-          color: Colors.white,
-        ),
-        backgroundColor: Colors.red[900],
-      );
+      print(e.code);
+      if (e.code == 'email-already-in-use') {
+        Get.snackbar(
+          'Error Creating User',
+          'Email already in use.',
+          snackPosition: SnackPosition.BOTTOM,
+          colorText: Colors.white,
+          icon: Icon(
+            Icons.error,
+            color: Colors.white,
+          ),
+          backgroundColor: Colors.red[900],
+        );
+      } else {
+        Get.snackbar(
+          'Error Creating User',
+          'Email must be valid and password at least 6 charaters.',
+          snackPosition: SnackPosition.BOTTOM,
+          colorText: Colors.white,
+          icon: Icon(
+            Icons.error,
+            color: Colors.white,
+          ),
+          backgroundColor: Colors.red[900],
+        );
+      }
     }
   }
 
   Future<void> login(String email, String password) async {
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
+      Get.offAll(() => HomePage());
     } catch (e) {
       Get.snackbar(
         'Error Logging In',
@@ -54,6 +75,7 @@ class AuthController extends GetxController {
   Future<void> signOut() async {
     try {
       await _auth.signOut();
+      Get.offAll(() => SignInPage());
     } catch (e) {
       Get.snackbar('Error Logging Out', e.message,
           snackPosition: SnackPosition.BOTTOM);

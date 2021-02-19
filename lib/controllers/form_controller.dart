@@ -1,22 +1,19 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class FormController extends GetxController {
-  bool clearEmailIcon = false;
-  bool showPasswordIcon = false;
-  bool hidePasswordIcon = false;
-  bool hidePasswordText = true;
+  bool clearEmailIcon;
+  bool showPasswordIcon;
+  bool hidePasswordIcon;
+  bool hidePasswordText;
 
   @override
   void onInit() {
     super.onInit();
+    clearEmailIcon = false;
+    showPasswordIcon = false;
+    hidePasswordIcon = false;
+    hidePasswordText = true;
     print('oninit');
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-    print('close');
   }
 
   void clearEmailField(_emailController) {
@@ -52,18 +49,18 @@ class FormController extends GetxController {
     }
   }
 
-  void showPassword() {
-    hidePasswordText = false;
-    hidePasswordIcon = false;
-    showPasswordIcon = true;
-    update();
-  }
-
-  void hidePassword() {
-    hidePasswordText = true;
-    hidePasswordIcon = true;
-    showPasswordIcon = false;
-    update();
+  void showPasswordToggle() {
+    if (hidePasswordText == true) {
+      hidePasswordText = false;
+      hidePasswordIcon = false;
+      showPasswordIcon = true;
+      update();
+    } else {
+      hidePasswordText = true;
+      hidePasswordIcon = true;
+      showPasswordIcon = false;
+      update();
+    }
   }
 
   void clearFields(_emailController, _passwordController, node) {
@@ -73,13 +70,6 @@ class FormController extends GetxController {
     hidePasswordIcon = false;
     showPasswordIcon = false;
     node.unfocus();
-  }
-
-  void nextFocus(node) {
-    node.nextFocus();
-  }
-
-  void testFunction() {
-    print('test');
+    update();
   }
 }
