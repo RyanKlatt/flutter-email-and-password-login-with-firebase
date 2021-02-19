@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_starter/controllers/form_controller.dart';
 import 'package:flutter_starter/screens/home_page.dart';
 import 'package:flutter_starter/screens/sign_in_page.dart';
 import 'package:get/get.dart';
@@ -56,6 +57,7 @@ class AuthController extends GetxController {
   Future<void> login(String email, String password) async {
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
+      Get.delete<FormController>();
       Get.offAll(() => HomePage());
     } catch (e) {
       Get.snackbar(

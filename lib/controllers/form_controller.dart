@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 
-class FormController extends GetxController {
+class FormController extends FullLifeCycleController {
   bool clearEmailIcon;
   bool showPasswordIcon;
   bool hidePasswordIcon;
@@ -14,6 +14,26 @@ class FormController extends GetxController {
     hidePasswordIcon = false;
     hidePasswordText = true;
     print('oninit');
+  }
+
+  @override
+  void onReady() {
+    super.onReady();
+    clearEmailIcon = false;
+    showPasswordIcon = false;
+    hidePasswordIcon = false;
+    hidePasswordText = true;
+    print('onReady');
+  }
+
+  @override
+  void onClose() {
+    super.onClose();
+    clearEmailIcon = false;
+    showPasswordIcon = false;
+    hidePasswordIcon = false;
+    hidePasswordText = true;
+    print('onClose');
   }
 
   void clearEmailField(_emailController) {

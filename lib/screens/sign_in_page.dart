@@ -9,9 +9,8 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SignInPage extends StatelessWidget {
-  final FormController _formController = Get.put(FormController());
   final AuthController _authController = Get.find();
-  //final FormController _formController = Get.find();
+  final FormController _formController = Get.find();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -198,7 +197,7 @@ class SignInPage extends StatelessWidget {
   FlatButton forgotPasswordButton() {
     return FlatButton(
       onPressed: () {
-        Get.to(ForgotPasswordPage());
+        Get.to(() => ForgotPasswordPage());
       },
       child: Text(
         'Forgot password?',
