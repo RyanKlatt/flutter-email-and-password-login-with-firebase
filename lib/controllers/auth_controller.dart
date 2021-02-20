@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_starter/controllers/form_controller.dart';
 import 'package:flutter_starter/screens/home_page.dart';
 import 'package:flutter_starter/screens/sign_in_page.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 class AuthController extends GetxController {
@@ -90,23 +91,58 @@ class AuthController extends GetxController {
     try {
       await _auth.sendPasswordResetEmail(email: email);
       Get.dialog(AlertDialog(
-        title: Text(
-          'Password Reset Email Sent',
-        ),
-        content: Text(
-          'Please check your email to reset password.',
-        ),
-        actions: [
-          FlatButton(
-            onPressed: () {
-              Get.delete<FormController>();
-              Get.offAll(() => SignInPage());
-            },
-            child: Text(
-              'Ok',
-            ),
+        elevation: 10.0,
+        contentPadding: EdgeInsets.all(10.0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(30.0),
           ),
-        ],
+        ),
+        title: Column(
+          children: [
+            Icon(
+              FontAwesomeIcons.check,
+              color: Colors.green,
+            ),
+            SizedBox(
+              height: 12.0,
+            ),
+            Text(
+              'Password Reset Email Sent',
+            ),
+          ],
+        ),
+        content: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Please check your email to reset password.',
+            ),
+            SizedBox(height: 10.0),
+            RaisedButton(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(30.0),
+                ),
+              ),
+              child: Text(
+                'Ok',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18.0,
+                ),
+              ),
+              color: Colors.blueGrey[500],
+              onPressed: () {
+                Get.delete<FormController>();
+                Get.to(() => SignInPage());
+              },
+            ),
+            SizedBox(height: 10.0),
+          ],
+        ),
       ));
     } catch (e) {
       Get.snackbar(
