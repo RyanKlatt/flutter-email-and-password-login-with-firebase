@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_starter/controllers/auth_controller.dart';
 import 'package:flutter_starter/controllers/form_controller.dart';
+import 'package:flutter_starter/screens/sign_in_page.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -174,8 +175,8 @@ class RegisterPage extends StatelessWidget {
   FlatButton haveAccountButton() {
     return FlatButton(
       onPressed: () {
-        _formController.clearFields();
-        Get.back();
+        Get.delete<FormController>();
+        Get.to(() => SignInPage());
       },
       child: Text(
         'Have an account? Sign In',

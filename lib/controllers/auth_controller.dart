@@ -85,4 +85,41 @@ class AuthController extends GetxController {
           snackPosition: SnackPosition.BOTTOM);
     }
   }
+
+  Future<void> sendPasswordResetEmail(String email) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+      Get.dialog(AlertDialog(
+        title: Text(
+          'Password Reset Email Sent',
+        ),
+        content: Text(
+          'Please check your email to reset password.',
+        ),
+        actions: [
+          FlatButton(
+            onPressed: () {
+              Get.delete<FormController>();
+              Get.offAll(() => SignInPage());
+            },
+            child: Text(
+              'Ok',
+            ),
+          ),
+        ],
+      ));
+    } catch (e) {
+      Get.snackbar(
+        'Error Resetting Password',
+        'Email is invalid.',
+        snackPosition: SnackPosition.BOTTOM,
+        colorText: Colors.white,
+        icon: Icon(
+          Icons.error,
+          color: Colors.white,
+        ),
+        backgroundColor: Colors.red[900],
+      );
+    }
+  }
 }

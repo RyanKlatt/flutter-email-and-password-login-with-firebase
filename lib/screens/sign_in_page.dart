@@ -152,8 +152,8 @@ class SignInPage extends StatelessWidget {
 
   RaisedButton signInButton() {
     return RaisedButton(
-      onPressed: () async {
-        await _authController.login(
+      onPressed: () {
+        _authController.login(
           _formController.emailController.text.trim(),
           _formController.passwordController.text.trim(),
         );
@@ -177,7 +177,7 @@ class SignInPage extends StatelessWidget {
   FlatButton registerButton() {
     return FlatButton(
       onPressed: () {
-        _formController.clearFields();
+        Get.delete<FormController>();
         Get.to(() => RegisterPage());
       },
       child: Text(
@@ -190,6 +190,7 @@ class SignInPage extends StatelessWidget {
   FlatButton forgotPasswordButton() {
     return FlatButton(
       onPressed: () {
+        Get.delete<FormController>();
         Get.to(() => ForgotPasswordPage());
       },
       child: Text(

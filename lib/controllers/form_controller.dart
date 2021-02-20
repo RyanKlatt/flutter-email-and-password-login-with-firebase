@@ -10,7 +10,7 @@ class FormController extends FullLifeCycleController {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-  final FocusNode node = FocusNode();
+  FocusNode node;
 
   @override
   void onInit() {
@@ -19,6 +19,7 @@ class FormController extends FullLifeCycleController {
     showPasswordIcon = false;
     hidePasswordIcon = false;
     hidePasswordText = true;
+    node = FocusNode();
     print('oninit');
   }
 
@@ -29,6 +30,9 @@ class FormController extends FullLifeCycleController {
     showPasswordIcon = false;
     hidePasswordIcon = false;
     hidePasswordText = true;
+    emailController.clear();
+    passwordController.clear();
+    node.unfocus();
     print('onClose');
   }
 
@@ -78,15 +82,5 @@ class FormController extends FullLifeCycleController {
       showPasswordIcon = false;
       update();
     }
-  }
-
-  void clearFields() {
-    emailController.clear();
-    passwordController.clear();
-    clearEmailIcon = false;
-    hidePasswordIcon = false;
-    showPasswordIcon = false;
-    node.unfocus();
-    update();
   }
 }
