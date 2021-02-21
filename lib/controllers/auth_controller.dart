@@ -1,3 +1,4 @@
+import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_starter/controllers/form_controller.dart';
@@ -90,60 +91,16 @@ class AuthController extends GetxController {
   Future<void> sendPasswordResetEmail(String email) async {
     try {
       await _auth.sendPasswordResetEmail(email: email);
-      Get.dialog(AlertDialog(
-        elevation: 10.0,
-        contentPadding: EdgeInsets.all(10.0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(30.0),
-          ),
-        ),
-        title: Column(
-          children: [
-            Icon(
-              FontAwesomeIcons.check,
-              color: Colors.green,
-            ),
-            SizedBox(
-              height: 12.0,
-            ),
-            Text(
-              'Password Reset Email Sent',
-            ),
-          ],
-        ),
-        content: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'Please check your email to reset password.',
-            ),
-            SizedBox(height: 10.0),
-            RaisedButton(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(30.0),
-                ),
-              ),
-              child: Text(
-                'Ok',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18.0,
-                ),
-              ),
-              color: Colors.blueGrey[500],
-              onPressed: () {
-                Get.delete<FormController>();
-                Get.to(() => SignInPage());
-              },
-            ),
-            SizedBox(height: 10.0),
-          ],
-        ),
-      ));
+      Get.defaultDialog(
+          radius: 20.0,
+          title: 'Password Reset Email Sent',
+          content: Text('Please check your email to reset password.'),
+          textConfirm: 'Ok',
+          confirmTextColor: Colors.white,
+          onConfirm: () {
+            Get.delete<FormController>();
+            Get.offAll(() => SignInPage());
+          });
     } catch (e) {
       Get.snackbar(
         'Error Resetting Password',

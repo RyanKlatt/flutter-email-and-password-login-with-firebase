@@ -18,7 +18,17 @@ class HomePage extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
               onTap: () {
-                _authController.signOut();
+                Get.defaultDialog(
+                    radius: 20.0,
+                    title: 'Logout?',
+                    content: Text('Are you sure you want to log out?'),
+                    textConfirm: 'Yes',
+                    confirmTextColor: Colors.white,
+                    textCancel: 'No',
+                    cancelTextColor: Colors.blueGrey[500],
+                    onConfirm: () {
+                      _authController.signOut();
+                    });
               },
               child: Icon(Icons.logout),
             ),
